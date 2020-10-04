@@ -1,22 +1,16 @@
 package com.accessor.eldorado
 
 import android.os.Bundle
-import android.view.SurfaceView
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.accessor.eldorado.dialog.FinalDialog
 import com.accessor.eldorado.game.DrawView
+import com.accessor.eldorado.util.fullscreenMode
+import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity() {
 
-    private lateinit var drawSurface: SurfaceView
-    private lateinit var clickCountText: TextView
     private lateinit var drawView: DrawView
-    private lateinit var spinButton: Button
 
     /**Количество игр*/
     private var clickCount: Int = 5
@@ -26,16 +20,9 @@ class GameActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.requestFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-        setContentView(R.layout.activity_game)
+        this.fullscreenMode()
 
-        drawSurface = findViewById(R.id.drawSurface)
-        clickCountText = findViewById(R.id.clickCountText)
-        spinButton = findViewById(R.id.spinButton)
+        setContentView(R.layout.activity_game)
 
         drawView = DrawView(this, drawSurface.holder)
         updateClickCountText()
@@ -48,30 +35,36 @@ class GameActivity : AppCompatActivity() {
 
         /**Уменьшаем счетчик*/
         clickCount--
-
         updateClickCountText()
+
         /**Блокируем нажатия*/
-        waitOfCompletionGame = true
         /**Визуально делаем кнопку недоступным*/
-        spinButton.isEnabled = false
-        spinButton.alpha = 0.4f
+        disableGame()
 
         /**Говорим игровому потоку что игра началась*/
         drawView.spin {
-
             /**
              * При окончании игры снимаем блокировку
              * Возвращаем кнопку обратно
              * */
-            waitOfCompletionGame = false
-            spinButton.isEnabled = true
-            spinButton.alpha = 1f
-
+            enableGame()
             /**Если счетчик меньше 1 вызываем финальный диалог*/
             if (clickCount < 1) {
                 FinalDialog(this).show()
             }
         }
+    }
+
+    private fun disableGame() {
+        waitOfCompletionGame = true
+        spinButton.isEnabled = false
+        spinButton.alpha = 0.4f
+    }
+
+    private fun enableGame() {
+        waitOfCompletionGame = false
+        spinButton.isEnabled = true
+        spinButton.alpha = 1f
     }
 
     /**Обновляем счетчик*/

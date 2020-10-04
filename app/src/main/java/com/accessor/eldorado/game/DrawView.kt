@@ -51,7 +51,7 @@ class DrawView(private val context: Context, val holder: SurfaceHolder) : Surfac
         holder.addCallback(this)
     }
 
-    override fun surfaceCreated(holder: SurfaceHolder?) {
+    override fun surfaceCreated(holder: SurfaceHolder) {
         /** инициализируем данные слотов*/
         slotData.init()
         /** запускаем игровой цикл*/
@@ -60,9 +60,9 @@ class DrawView(private val context: Context, val holder: SurfaceHolder) : Surfac
         gameLoop.start()
     }
 
-    override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {}
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
 
-    override fun surfaceDestroyed(holder: SurfaceHolder?) {
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
         /** завершаем цикл*/
         stop()
     }

@@ -8,6 +8,7 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.accessor.eldorado.dialog.PrehistoryDialog
+import com.accessor.eldorado.util.fullscreenMode
 
 /**
  * Меню приложения
@@ -16,12 +17,7 @@ class MenuActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /** Делаем полный экран*/
-        window.requestFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+        this.fullscreenMode()
 
         setContentView(R.layout.activity_menu)
     }
@@ -42,17 +38,16 @@ class MenuActivity : AppCompatActivity() {
 
     /** Метод вызывается при нажатии на кнопку VK в меню*/
     fun gotoVK(view: View) {
-        /** Запускаем браузер*/
-        val browserIntent =
-            Intent(Intent.ACTION_VIEW, Uri.parse("http://wwww.vk.com/j_imomaddinov"))
-        startActivity(browserIntent)
+        openBrowser("http://wwww.vk.com/j_imomaddinov")
     }
 
     /** Метод вызывается при нажатии на кнопку GITHUB в меню*/
     fun gotoGithub(view: View) {
-        /** Запускаем браузер*/
-        val browserIntent =
-            Intent(Intent.ACTION_VIEW, Uri.parse("http://www.github.com/accessor-code/El-Dorado"))
+        openBrowser("http://www.github.com/accessor-code/El-Dorado")
+    }
+
+    fun openBrowser(url: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
     }
 }
